@@ -1,0 +1,43 @@
+{
+  "name": "cosmastech/laravel-statsd-adapter",
+  "description": "Easily use statsd-client-adapter within your Laravel project",
+  "license": "wtfpl",
+  "authors": [
+    {
+      "name": "Luke Kuzmish",
+      "email": "luke@kuzmish.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Cosmastech\\LaravelStatsDAdapter\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Cosmastech\\LaravelStatsDAdapter\\Tests\\": "tests"
+    }
+  },
+  "require": {
+    "php": "^8.2",
+    "cosmastech/statsd-client-adapter": "^0.0.1",
+    "illuminate/support": "^10.0|^11.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.2.5",
+    "friendsofphp/php-cs-fixer": "^3.59"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Cosmastech\\LaravelStatsDAdapter\\LaravelStatsDAdapterServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "phpunit tests",
+    "php-cs-fixer": "./vendor/bin/php-cs-fixer fix ./",
+    "php-cs-fixer-check": "./vendor/bin/php-cs-fixer check ./"
+  }
+}
