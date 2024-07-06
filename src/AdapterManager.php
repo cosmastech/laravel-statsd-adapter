@@ -18,15 +18,21 @@ class AdapterManager extends MultipleInstanceManager
 {
     protected $driverKey = 'adapter';
 
+    protected string $defaultInstanceName;
+
     /**
      * The configuration repository instance.
-     *
+     * @todo remove this after laravel/framework release 2024-07-06
      * @var \Illuminate\Contracts\Config\Repository
      */
     protected $config;
 
+    /**
+     * @inheritDoc
+     */
     public function __construct($app)
     {
+        // @todo remove this after laravel/framework release 2024-07-06
         parent::__construct($app);
         $this->config = $this->app->get('config');
     }
@@ -36,7 +42,7 @@ class AdapterManager extends MultipleInstanceManager
      */
     public function getDefaultInstance()
     {
-        return $this->config->get("statsd-adapter.default");
+        return $this->defaultInstanceName ?? $this->config->get("statsd-adapter.default");
     }
 
     /**
@@ -44,7 +50,7 @@ class AdapterManager extends MultipleInstanceManager
      */
     public function setDefaultInstance($name)
     {
-        // not sure if this is needed
+        $this->defaultInstanceName = $name;
     }
 
     /**
@@ -64,6 +70,11 @@ class AdapterManager extends MultipleInstanceManager
     }
 
     protected function createLog_datadogAdapter(array $config): DatadogStatsDClientAdapter
+    {
+        return $this->createDatadogAdapter($config);
+    }
+
+    protected function createLogDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
         $logLevel = $config['log_level'] ?? 'debug';
 
