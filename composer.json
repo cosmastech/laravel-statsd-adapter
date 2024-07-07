@@ -32,7 +32,8 @@
         "phpunit/phpunit": "^11.2.5",
         "friendsofphp/php-cs-fixer": "^3.59",
         "league/statsd": "^2.0.0",
-        "orchestra/testbench": "^9.1"
+        "orchestra/testbench": "^9.1",
+        "laravel/facade-documenter": "dev-main"
     },
     "extra": {
         "laravel": {
@@ -59,6 +60,18 @@
         ],
         "lint": [
             "@php vendor/bin/phpstan analyse"
+        ],
+        "facade-documentor": [
+            "@php -f vendor/bin/facade.php -- \"\\\\Cosmastech\\\\LaravelStatsDAdapter\\\\Stats\""
+        ],
+        "facade-documentor-lint": [
+            "@php -f vendor/bin/facade.php -- --lint \"\\\\Cosmastech\\\\LaravelStatsDAdapter\\\\Stats\""
         ]
+    },
+    "repositories": {
+        "facade-documenter": {
+            "type": "vcs",
+            "url": "git@github.com:laravel/facade-documenter.git"
+        }
     }
 }

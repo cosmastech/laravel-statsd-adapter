@@ -14,6 +14,9 @@ use Illuminate\Support\MultipleInstanceManager;
 use League\StatsD\Client;
 use League\StatsD\Exception\ConfigurationException;
 
+/**
+ * @mixin  \Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter
+ */
 class AdapterManager extends MultipleInstanceManager
 {
     protected $driverKey = 'adapter';
