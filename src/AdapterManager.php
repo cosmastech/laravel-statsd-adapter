@@ -71,7 +71,7 @@ class AdapterManager extends MultipleInstanceManager
 
     protected function createLog_datadogAdapter(array $config): DatadogStatsDClientAdapter
     {
-        return $this->createDatadogAdapter($config);
+        return $this->createLogDatadogAdapter($config);
     }
 
     protected function createLogDatadogAdapter(array $config): DatadogStatsDClientAdapter

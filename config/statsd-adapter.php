@@ -12,10 +12,10 @@ return [
      */
     "channels" => [
         "memory" => [
-            "driver" => "memory",
+            "adapter" => "memory",
         ],
         "league" => [
-            "driver" => "league",
+            "adapter" => "league",
             "instance_id" => null,
             'host' => env('STATSD_HOST', '127.0.0.1'),
             'port' => env('STATSD_PORT', 8125),
@@ -23,7 +23,7 @@ return [
             'throwConnectionExceptions' => true,
         ],
         "datadog" => [
-            "driver" => "datadog",
+            "adapter" => "datadog",
             "host" => env("DD_AGENT_HOST"),
             "port" => env("DD_DOGSTATSD_PORT"),
             "socket_path" => null,
@@ -34,7 +34,7 @@ return [
             "disable_telemetry" => null,
         ],
         "log_datadog" => [
-            "driver" => "log_datadog",
+            "adapter" => "log_datadog",
             "log_level" => "debug",
             "decimal_precision" => null,
             "global_tags" => [],
