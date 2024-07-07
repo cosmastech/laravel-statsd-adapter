@@ -45,3 +45,6 @@ jobs:
 
     - name: Document facade
       run: composer facade-documentor-lint
+
+    - name: Static Analysis
+      run: composer static-analysis
