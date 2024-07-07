@@ -15,9 +15,34 @@ use PHPUnit\Framework\Attributes\Test;
 class StatsTest extends AbstractTestCase
 {
     #[Test]
+    public function getDefaultInstance_returnsConfigDefaultAdapter()
+    {
+        // Given
+        Config::set("statsd-adapter.default", "this-does-not-exist-but-thats-ok");
+
+        // When
+        $defaultInstanceString = Stats::getDefaultInstance();
+
+        // Then
+        self::assertEquals("this-does-not-exist-but-thats-ok", $defaultInstanceString);
+    }
+
+    #[Test]
+    public function setDefaultInstance_overridesConfigDefault()
+    {
+        // Given application is configured
+
+        // When
+        Stats::setDefaultInstance("yooooo");
+
+        // Then
+        self::assertEquals("yooooo", Stats::getDefaultInstance());
+    }
+
+    #[Test]
     public function getFacadeRoot_returnsAdapterManager()
     {
-        // Given facade is set up
+        // Given facade has been booted
 
         // When
         $facadeRoot = Stats::getFacadeRoot();
