@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\Test;
 class StatsTest extends AbstractTestCase
 {
     #[Test]
-    public function getFacadeRoot_returnsAdapterManager()
+    public function getFacadeRoot_returnsAdapterManager(): void
     {
         // Given facade has been booted
 
@@ -24,7 +24,7 @@ class StatsTest extends AbstractTestCase
     }
 
     #[Test]
-    public function memoryAdapter_logsRespectCarbonTestTime()
+    public function memoryAdapter_logsRespectCarbonTestTime(): void
     {
         // Given
         /** @var InMemoryClientAdapter $inMemoryClientAdapter */

@@ -13,7 +13,7 @@ use PHPUnit\Framework\Attributes\Test;
 class AdapterManagerTest extends AbstractTestCase
 {
     #[Test]
-    public function getDefaultInstance_returnsConfigDefaultAdapter()
+    public function getDefaultInstance_returnsConfigDefaultAdapter(): void
     {
         // Given
         $adapterManager = $this->createAdapterManager();
@@ -29,7 +29,7 @@ class AdapterManagerTest extends AbstractTestCase
     }
 
     #[Test]
-    public function setDefaultInstance_overridesConfigDefault()
+    public function setDefaultInstance_overridesConfigDefault(): void
     {
         // Given
         $adapterManager = $this->createAdapterManager();
@@ -42,7 +42,7 @@ class AdapterManagerTest extends AbstractTestCase
     }
 
     #[Test]
-    public function memoryAdapter_instance_returnsInMemoryClientAdapter()
+    public function memoryAdapter_instance_returnsInMemoryClientAdapter(): void
     {
         // Given
         $adapterManager = $this->createAdapterManager();
@@ -59,7 +59,7 @@ class AdapterManagerTest extends AbstractTestCase
     }
 
     #[Test]
-    public function logDatadog_instance_returnsConfiguredDatadogClient()
+    public function logDatadog_instance_returnsConfiguredDatadogClient(): void
     {
         // Given
         $adapterManager = $this->createAdapterManager();
@@ -74,7 +74,7 @@ class AdapterManagerTest extends AbstractTestCase
         self::assertInstanceOf(DatadogLoggingClient::class, $datadogClientAdapter->getClient());
     }
 
-    public function league_instance_returnsConfiguredLeagueStatsDClient()
+    public function league_instance_returnsConfiguredLeagueStatsDClient(): void
     {
         // Given
         $adapterManager = $this->createAdapterManager();
