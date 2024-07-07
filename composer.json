@@ -33,7 +33,8 @@
         "friendsofphp/php-cs-fixer": "^3.59",
         "league/statsd": "^2.0.0",
         "orchestra/testbench": "^9.1",
-        "laravel/facade-documenter": "dev-main"
+        "laravel/facade-documenter": "dev-main",
+        "phpstan/phpstan": "^1.11"
     },
     "extra": {
         "laravel": {
@@ -58,8 +59,8 @@
             "@build",
             "@php vendor/bin/testbench serve"
         ],
-        "lint": [
-            "@php vendor/bin/phpstan analyse"
+        "static-analysis": [
+            "@php vendor/bin/phpstan analyse -c phpstan.neon"
         ],
         "facade-documentor": [
             "@php -f vendor/bin/facade.php -- \"\\\\Cosmastech\\\\LaravelStatsDAdapter\\\\Stats\""

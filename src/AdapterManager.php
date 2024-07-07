@@ -57,14 +57,17 @@ class AdapterManager extends MultipleInstanceManager
     }
 
     /**
-     * @inheritDoc
+     * @return array<string, mixed>|null
      */
     public function getInstanceConfig($name)
     {
         return $this->config->get("statsd-adapter.channels.{$name}");
     }
 
-
+    /**
+     * @param  array<string, mixed>  $config
+     * @return InMemoryClientAdapter
+     */
     protected function createMemoryAdapter(array $config): InMemoryClientAdapter
     {
         $wrapperClock = new WrapperClock(FactoryImmutable::getDefaultInstance());
@@ -72,11 +75,20 @@ class AdapterManager extends MultipleInstanceManager
         return new InMemoryClientAdapter($wrapperClock);
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     * @return DatadogStatsDClientAdapter
+     */
     protected function createLog_datadogAdapter(array $config): DatadogStatsDClientAdapter
     {
         return $this->createLogDatadogAdapter($config);
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     * @return DatadogStatsDClientAdapter
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     protected function createLogDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
         $logLevel = $config['log_level'] ?? 'debug';
@@ -86,12 +98,18 @@ class AdapterManager extends MultipleInstanceManager
         );
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     * @return DatadogStatsDClientAdapter
+     */
     protected function createDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
         return new DatadogStatsDClientAdapter(new DogStatsd($config));
     }
 
     /**
+     * @param array<string, mixed> $config
+     * @return LeagueStatsDClientAdapter
      * @throws ConfigurationException
      */
     protected function createLeagueAdapter(array $config): LeagueStatsDClientAdapter
