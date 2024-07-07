@@ -1,43 +1,78 @@
 {
-  "name": "cosmastech/laravel-statsd-adapter",
-  "description": "Easily use statsd-client-adapter within your Laravel project",
-  "license": "wtfpl",
-  "authors": [
-    {
-      "name": "Luke Kuzmish",
-      "email": "luke@kuzmish.com",
-      "role": "Developer"
+    "name": "cosmastech/laravel-statsd-adapter",
+    "description": "Easily use statsd-client-adapter within your Laravel project",
+    "license": "wtfpl",
+    "authors": [
+        {
+            "name": "Luke Kuzmish",
+            "email": "luke@kuzmish.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cosmastech\\LaravelStatsDAdapter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cosmastech\\LaravelStatsDAdapter\\Tests\\": "tests",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "cosmastech/statsd-client-adapter": "^0.0.2",
+        "illuminate/support": "^10.0|^11.0",
+        "illuminate/contracts": "^10.0|^11.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.2.5",
+        "friendsofphp/php-cs-fixer": "^3.59",
+        "league/statsd": "^2.0.0",
+        "orchestra/testbench": "^9.1",
+        "laravel/facade-documenter": "dev-main",
+        "phpstan/phpstan": "^1.11"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cosmastech\\LaravelStatsDAdapter\\StatsDAdapterServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "phpunit tests",
+        "php-cs-fixer": "./vendor/bin/php-cs-fixer fix ./",
+        "php-cs-fixer-check": "./vendor/bin/php-cs-fixer check ./",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "static-analysis": [
+            "@php vendor/bin/phpstan analyse -c phpstan.neon"
+        ],
+        "facade-documentor": [
+            "@php -f vendor/bin/facade.php -- \"\\\\Cosmastech\\\\LaravelStatsDAdapter\\\\Stats\""
+        ],
+        "facade-documentor-lint": [
+            "@php -f vendor/bin/facade.php -- --lint \"\\\\Cosmastech\\\\LaravelStatsDAdapter\\\\Stats\""
+        ]
+    },
+    "repositories": {
+        "facade-documenter": {
+            "type": "vcs",
+            "url": "git@github.com:laravel/facade-documenter.git"
+        }
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "Cosmastech\\LaravelStatsDAdapter\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Cosmastech\\LaravelStatsDAdapter\\Tests\\": "tests"
-    }
-  },
-  "require": {
-    "php": "^8.2",
-    "cosmastech/statsd-client-adapter": "^0.0.1",
-    "illuminate/support": "^10.0|^11.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^11.2.5",
-    "friendsofphp/php-cs-fixer": "^3.59"
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Cosmastech\\LaravelStatsDAdapter\\LaravelStatsDAdapterServiceProvider"
-      ]
-    }
-  },
-  "scripts": {
-    "test": "phpunit tests",
-    "php-cs-fixer": "./vendor/bin/php-cs-fixer fix ./",
-    "php-cs-fixer-check": "./vendor/bin/php-cs-fixer check ./"
-  }
 }
