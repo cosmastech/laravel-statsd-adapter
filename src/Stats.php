@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static void getDefaultInstance()
  * @method static void setDefaultInstance(string $name)
- * @method static void getInstanceConfig(string $name)
+ * @method static array|null getInstanceConfig(string $name)
  * @method static mixed instance(string|null $name = null)
  * @method static \Cosmastech\LaravelStatsDAdapter\AdapterManager forgetInstance(array|string|null $name = null)
  * @method static void purge(string|null $name = null)
