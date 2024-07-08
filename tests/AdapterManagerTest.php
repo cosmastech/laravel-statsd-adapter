@@ -112,4 +112,35 @@ class AdapterManagerTest extends AbstractTestCase
         // Then
         self::assertSame(["abc" => true], $adapterManager->getDefaultTags());
     }
+
+    #[Test]
+    public function setDefaultTags_passesTagsToExistingInstance(): void
+    {
+        // Given
+        $adapterManager = $this->createAdapterManager();
+
+        /** @var InMemoryClientAdapter $inMemoryClientAdapter */
+        $inMemoryClientAdapter = $adapterManager->instance("memory");
+
+        // When
+        $adapterManager->setDefaultTags(["abc" => "hello"]);
+
+        // Then
+        self::assertSame(["abc" => "hello"], $inMemoryClientAdapter->getDefaultTags());
+    }
+
+    public function setDefaultTags_passesToNewInstance(): void
+    {
+        // Given
+        $adapterManager = $this->createAdapterManager();
+
+        // And an instance is created
+        $adapterManager->instance("log_datadog");
+
+        // When
+        $adapterManager->setDefaultTags(["abc" => "123"]);
+
+        // Then
+        self::assertEquals(["abc" => "123"], $adapterManager->instance("memory"));
+    }
 }

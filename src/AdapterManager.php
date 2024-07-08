@@ -7,6 +7,7 @@ use Carbon\WrapperClock;
 use Cosmastech\StatsDClientAdapter\Adapters\Datadog\DatadogStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
+use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Clients\Datadog\DatadogLoggingClient;
 use Cosmastech\StatsDClientAdapter\Utility\SampleRateDecider\SampleRateSendDecider;
 use DataDog\DogStatsd;
@@ -16,6 +17,9 @@ use League\StatsD\Client;
 use League\StatsD\Exception\ConfigurationException;
 
 /**
+ * @property array<int, StatsDClientAdapter> $instances
+ * @method StatsDClientAdapter instance($name = null)
+ *
  * @mixin  \Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter
  */
 class AdapterManager extends MultipleInstanceManager
@@ -34,7 +38,7 @@ class AdapterManager extends MultipleInstanceManager
     /**
      * @var array<mixed, mixed>
      */
-    protected array $defaultTags = [];
+    protected array $defaultTags;
 
     /**
      * @inheritDoc
@@ -71,18 +75,32 @@ class AdapterManager extends MultipleInstanceManager
     }
 
     /**
+     * @param  array<mixed, mixed>  $tags
+     * @return void
+     */
+    public function setDefaultTags(array $tags): void
+    {
+        $this->defaultTags = $tags;
+
+        foreach ($this->instances as $instance) {
+            $instance->setDefaultTags($this->defaultTags);
+        }
+    }
+
+    /**
+     * @return array<mixed, mixed>
+     */
+    public function getDefaultTags(): array
+    {
+        return $this->defaultTags ?? $this->getDefaultTagsFromConfig();
+    }
+
+    /**
      * @return array<mixed, mixed>
      */
     protected function getDefaultTagsFromConfig(): array
     {
         return $this->config->get('statsd-adapter.default_tags', []);
-    }
-
-    public function setDefaultTags(array $tags): void
-    {
-        $this->defaultTags = $tags;
-
-        
     }
 
     /**
@@ -93,7 +111,7 @@ class AdapterManager extends MultipleInstanceManager
     {
         $wrapperClock = new WrapperClock(FactoryImmutable::getDefaultInstance());
 
-        return new InMemoryClientAdapter($wrapperClock, $this->getDefaultTagsFromConfig());
+        return new InMemoryClientAdapter($wrapperClock, $this->getDefaultTags());
     }
 
     /**
@@ -119,7 +137,7 @@ class AdapterManager extends MultipleInstanceManager
 
         return new DatadogStatsDClientAdapter(
             new DatadogLoggingClient($this->app->make('log'), $logLevel, $config),
-            $this->getDefaultTagsFromConfig()
+            $this->getDefaultTags()
         );
     }
 
@@ -129,7 +147,7 @@ class AdapterManager extends MultipleInstanceManager
      */
     protected function createDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
-        return new DatadogStatsDClientAdapter(new DogStatsd($config), $this->getDefaultTagsFromConfig());
+        return new DatadogStatsDClientAdapter(new DogStatsd($config), $this->getDefaultTags());
     }
 
     /**
@@ -146,7 +164,7 @@ class AdapterManager extends MultipleInstanceManager
         return new LeagueStatsDClientAdapter(
             $leagueClient,
             new SampleRateSendDecider(),
-            $this->getDefaultTagsFromConfig()
+            $this->getDefaultTags()
         );
     }
 }
