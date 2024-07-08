@@ -42,7 +42,7 @@ class AdapterManagerTest extends AbstractTestCase
     }
 
     #[Test]
-    public function memoryAdapter_instance_returnsInMemoryClientAdapter(): void
+    public function instance_memoryAdapter_returnsInMemoryClientAdapter(): void
     {
         // Given
         $adapterManager = $this->createAdapterManager();
@@ -59,7 +59,7 @@ class AdapterManagerTest extends AbstractTestCase
     }
 
     #[Test]
-    public function logDatadog_instance_returnsConfiguredDatadogClient(): void
+    public function instance_logDatadog_returnsConfiguredDatadogClient(): void
     {
         // Given
         $adapterManager = $this->createAdapterManager();
@@ -74,7 +74,7 @@ class AdapterManagerTest extends AbstractTestCase
         self::assertInstanceOf(DatadogLoggingClient::class, $datadogClientAdapter->getClient());
     }
 
-    public function league_instance_returnsConfiguredLeagueStatsDClient(): void
+    public function instance_league_returnsConfiguredLeagueStatsDClient(): void
     {
         // Given
         $adapterManager = $this->createAdapterManager();
@@ -88,5 +88,28 @@ class AdapterManagerTest extends AbstractTestCase
         // Then
         self::assertInstanceOf(LeagueStatsDClientAdapter::class, $leagueStatsDClientAdapter);
         self::assertInstanceOf(StatsDClient::class, $leagueStatsDClientAdapter->getClient());
+    }
+
+    #[Test]
+    public function getDefaultTags_withNoDefaultTagsSet_returnsEmptyArray(): void
+    {
+        // Given
+        $adapterManager = $this->createAdapterManager();
+
+        // Then
+        self::assertEquals([], $adapterManager->getDefaultTags());
+    }
+
+    #[Test]
+    public function getDefaultTags_withDefaultTagsSet_returnsDefaultTagsArray(): void
+    {
+        // Given
+        $adapterManager = $this->createAdapterManager();
+
+        // When
+        $adapterManager->setDefaultTags(['abc' => true]);
+
+        // Then
+        self::assertSame(["abc" => true], $adapterManager->getDefaultTags());
     }
 }

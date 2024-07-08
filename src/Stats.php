@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static void decrement(array|string $stats, float $sampleRate = 1, array $tags = [], int $value = 1)
  * @method static void updateStats(array|string $stats, int $delta = 1, void $sampleRate = 1, void $tags = null)
  * @method static mixed getClient()
+ * @method static void setDefaultTags(array $defaultTags = [])
+ * @method static array getDefaultTags()
  *
  * @see \Cosmastech\LaravelStatsDAdapter\AdapterManager
  */

@@ -10,6 +10,7 @@ use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Clients\Datadog\DatadogLoggingClient;
 use Cosmastech\StatsDClientAdapter\Utility\SampleRateDecider\SampleRateSendDecider;
 use DataDog\DogStatsd;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\MultipleInstanceManager;
 use League\StatsD\Client;
 use League\StatsD\Exception\ConfigurationException;
@@ -29,6 +30,11 @@ class AdapterManager extends MultipleInstanceManager
      * @var \Illuminate\Contracts\Config\Repository
      */
     protected $config;
+
+    /**
+     * @var array<mixed, mixed>
+     */
+    protected array $defaultTags = [];
 
     /**
      * @inheritDoc
@@ -65,6 +71,21 @@ class AdapterManager extends MultipleInstanceManager
     }
 
     /**
+     * @return array<mixed, mixed>
+     */
+    protected function getDefaultTagsFromConfig(): array
+    {
+        return $this->config->get('statsd-adapter.default_tags', []);
+    }
+
+    public function setDefaultTags(array $tags): void
+    {
+        $this->defaultTags = $tags;
+
+        
+    }
+
+    /**
      * @param  array<string, mixed>  $config
      * @return InMemoryClientAdapter
      */
@@ -72,12 +93,14 @@ class AdapterManager extends MultipleInstanceManager
     {
         $wrapperClock = new WrapperClock(FactoryImmutable::getDefaultInstance());
 
-        return new InMemoryClientAdapter($wrapperClock);
+        return new InMemoryClientAdapter($wrapperClock, $this->getDefaultTagsFromConfig());
     }
 
     /**
      * @param  array<string, mixed>  $config
      * @return DatadogStatsDClientAdapter
+     *
+     * @throws BindingResolutionException
      */
     protected function createLog_datadogAdapter(array $config): DatadogStatsDClientAdapter
     {
@@ -87,14 +110,16 @@ class AdapterManager extends MultipleInstanceManager
     /**
      * @param  array<string, mixed>  $config
      * @return DatadogStatsDClientAdapter
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @throws BindingResolutionException
      */
     protected function createLogDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
         $logLevel = $config['log_level'] ?? 'debug';
 
         return new DatadogStatsDClientAdapter(
-            new DatadogLoggingClient($this->app->make('log'), $logLevel, $config)
+            new DatadogLoggingClient($this->app->make('log'), $logLevel, $config),
+            $this->getDefaultTagsFromConfig()
         );
     }
 
@@ -104,12 +129,13 @@ class AdapterManager extends MultipleInstanceManager
      */
     protected function createDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
-        return new DatadogStatsDClientAdapter(new DogStatsd($config));
+        return new DatadogStatsDClientAdapter(new DogStatsd($config), $this->getDefaultTagsFromConfig());
     }
 
     /**
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
      * @return LeagueStatsDClientAdapter
+     *
      * @throws ConfigurationException
      */
     protected function createLeagueAdapter(array $config): LeagueStatsDClientAdapter
@@ -117,6 +143,10 @@ class AdapterManager extends MultipleInstanceManager
         $leagueClient = new Client($config['instance_id'] ?? null);
         $leagueClient->configure($config);
 
-        return new LeagueStatsDClientAdapter($leagueClient, new SampleRateSendDecider());
+        return new LeagueStatsDClientAdapter(
+            $leagueClient,
+            new SampleRateSendDecider(),
+            $this->getDefaultTagsFromConfig()
+        );
     }
 }
