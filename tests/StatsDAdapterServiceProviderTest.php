@@ -41,4 +41,22 @@ class StatsDAdapterServiceProviderTest extends AbstractTestCase
         // And
         self::assertSame($clientAdapter, $this->app->make(StatsDClientAdapter::class));
     }
+
+    #[Test]
+    public function passesDefaultTagsToAdapterManager(): void
+    {
+        // Given
+        $defaultTags = [
+            "my_first_tag" => 1,
+            "my_second_tag" => 2,
+            "my_third_tag" => 3.0,
+        ];
+        Config::set("statsd-adapter.default_tags", $defaultTags);
+
+        // When
+        $clientAdapter = $this->app->make(StatsDClientAdapter::class);
+
+        // Then
+        self::assertEqualsCanonicalizing($defaultTags, $clientAdapter->getDefaultTags());
+    }
 }

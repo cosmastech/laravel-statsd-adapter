@@ -4,6 +4,11 @@ return [
     'default' => env("STATSD_ADAPTER_DEFAULT", "memory"),
 
     /**
+     * These are tags which should be added to every outgoing stat.
+     */
+    "default_tags" => [],
+
+    /**
      * You may name your channel anything you wish. Valid drivers are:
      *      memory
      *      league
