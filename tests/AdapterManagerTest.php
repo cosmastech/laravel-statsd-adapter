@@ -129,6 +129,7 @@ class AdapterManagerTest extends AbstractTestCase
         self::assertSame(["abc" => "hello"], $inMemoryClientAdapter->getDefaultTags());
     }
 
+    #[Test]
     public function setDefaultTags_passesToNewInstance(): void
     {
         // Given
@@ -141,6 +142,6 @@ class AdapterManagerTest extends AbstractTestCase
         $adapterManager->setDefaultTags(["abc" => "123"]);
 
         // Then
-        self::assertEquals(["abc" => "123"], $adapterManager->instance("memory"));
+        self::assertEquals(["abc" => "123"], $adapterManager->instance("memory")->getDefaultTags());
     }
 }
