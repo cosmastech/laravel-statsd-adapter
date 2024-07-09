@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\Facade;
  * @method static void gauge(string $stat, float $value, float $sampleRate = 1, array $tags = [])
  * @method static void histogram(string $stat, float $value, float $sampleRate = 1, array $tags = [])
  * @method static void distribution(string $stat, float $value, float $sampleRate = 1, array $tags = [])
- * @method static void set(string $stat, string|float $value, float $sampleRate = 1, array $tags = [])
+ * @method static void set(string $stat, float|string $value, float $sampleRate = 1, array $tags = [])
  * @method static void increment(array|string $stats, float $sampleRate = 1, array $tags = [], int $value = 1)
  * @method static void decrement(array|string $stats, float $sampleRate = 1, array $tags = [], int $value = 1)
- * @method static void updateStats(array|string $stats, int $delta = 1, void $sampleRate = 1, void $tags = null)
+ * @method static void updateStats(array|string $stats, int $delta = 1, float $sampleRate = 1, array $tags = [])
  * @method static mixed getClient()
  *
  * @see \Cosmastech\LaravelStatsDAdapter\AdapterManager
