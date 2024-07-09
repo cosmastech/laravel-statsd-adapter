@@ -20,6 +20,7 @@ return [
             "adapter" => "memory",
         ],
         "league" => [
+            // see configuration options: https://github.com/thephpleague/statsd?tab=readme-ov-file#configuring
             "adapter" => "league",
             "instance_id" => null,
             'host' => env('STATSD_HOST', '127.0.0.1'),
@@ -28,6 +29,7 @@ return [
             'throwConnectionExceptions' => true,
         ],
         "datadog" => [
+            // see configuration options: https://docs.datadoghq.com/developers/dogstatsd/?code-lang=php&tab=hostagent#client-instantiation-parameters
             "adapter" => "datadog",
             "host" => env("DD_AGENT_HOST"),
             "port" => env("DD_DOGSTATSD_PORT"),
@@ -39,6 +41,7 @@ return [
             "disable_telemetry" => null,
         ],
         "log_datadog" => [
+            // see configuration options: https://docs.datadoghq.com/developers/dogstatsd/?code-lang=php&tab=hostagent#client-instantiation-parameters
             "adapter" => "log_datadog",
             "log_level" => "debug",
             "decimal_precision" => null,
