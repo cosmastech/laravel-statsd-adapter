@@ -30,7 +30,7 @@ class AdapterManager extends MultipleInstanceManager
 
     /**
      * The configuration repository instance.
-     * @todo remove this after laravel/framework release 2024-07-06
+     *
      * @var \Illuminate\Contracts\Config\Repository
      */
     protected $config;
@@ -45,9 +45,19 @@ class AdapterManager extends MultipleInstanceManager
      */
     public function __construct($app)
     {
-        // @todo remove this after laravel/framework release 2024-07-06
         parent::__construct($app);
         $this->config = $this->app->get('config');
+    }
+
+    /**
+     * Get instance of StatsDClientAdapter by channel name.
+     *
+     * @param  string|null  $name
+     * @return StatsDClientAdapter
+     */
+    public function channel(string $name = null): StatsDClientAdapter
+    {
+        return $this->instance($name);
     }
 
     /**

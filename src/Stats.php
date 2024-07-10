@@ -5,6 +5,7 @@ namespace Cosmastech\LaravelStatsDAdapter;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * @method static \Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter channel(string|null $name = null)
  * @method static void getDefaultInstance()
  * @method static void setDefaultInstance(string $name)
  * @method static array|null getInstanceConfig(string $name)
