@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void purge(string|null $name = null)
  * @method static \Cosmastech\LaravelStatsDAdapter\AdapterManager extend(string $name, \Closure $callback)
  * @method static void timing(string $stat, float $durationMs, float $sampleRate = 1, array $tags = [])
+ * @method static mixed time(callable $closure, string $stat, float $sampleRate = 1, array $tags = [])
  * @method static void gauge(string $stat, float $value, float $sampleRate = 1, array $tags = [])
  * @method static void histogram(string $stat, float $value, float $sampleRate = 1, array $tags = [])
  * @method static void distribution(string $stat, float $value, float $sampleRate = 1, array $tags = [])
