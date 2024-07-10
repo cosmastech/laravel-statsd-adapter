@@ -40,7 +40,7 @@ class StatsTest extends AbstractTestCase
         $stats = $inMemoryClientAdapter->getStats();
         self::assertEqualsWithDelta(
             (new DateTimeImmutable("2021-01-01 00:00:00"))->getTimestamp(),
-            $stats->count[0]->recordedAt->getTimestamp(),
+            $stats->getCounts()[0]->recordedAt->getTimestamp(),
             1
         );
     }
