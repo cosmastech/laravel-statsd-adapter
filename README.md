@@ -148,8 +148,6 @@ Track the number of database queries and their execution time:
 You can define multiple connections and use them as needed:
 
 ```php
-use CosmasTech\Statsd\Facades\Statsd;
-
 Stats::channel('memory')->increment('custom.metric');
 ```
 
@@ -158,7 +156,7 @@ Stats::channel('memory')->increment('custom.metric');
 Create dynamic metric names based on runtime data:
 
 ```php
-$role = auth()->role;
+$role = auth()->role; // Let's assume the User model has a property named `role`
 Stats::increment("user.{$role}.login");
 ```
 
