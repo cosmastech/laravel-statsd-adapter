@@ -122,12 +122,12 @@ Stats::increment('page.views', tags: ['url' => '/home']);
 Measure and monitor the response time of your application:
 
 ```php
-$startTime = microtime(true);
+function makeSomeApiCall()
+{
+    return \Http::get("https://packagist.org/packages/list.json?vendor=cosmastech");
+}
 
-// Your application logic
-
-$endTime = microtime(true);
-Stats::timing('response.time', ($endTime - $startTime) * 1000);
+$apiResponseToDoSomethingWith = Stats::time(makeSomeApiCall(...), "api-request");
 ```
 
 #### Database Query Monitoring

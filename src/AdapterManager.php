@@ -9,12 +9,11 @@ use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Clients\Datadog\DatadogLoggingClient;
-use Cosmastech\StatsDClientAdapter\Utility\SampleRateDecider\SampleRateSendDecider;
 use DataDog\DogStatsd;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\MultipleInstanceManager;
-use League\StatsD\Client;
 use League\StatsD\Exception\ConfigurationException;
+use Psr\Clock\ClockInterface;
 
 /**
  * @property array<int, StatsDClientAdapter> $instances
@@ -119,9 +118,10 @@ class AdapterManager extends MultipleInstanceManager
      */
     protected function createMemoryAdapter(array $config): InMemoryClientAdapter
     {
-        $wrapperClock = new WrapperClock(FactoryImmutable::getDefaultInstance());
-
-        return new InMemoryClientAdapter($wrapperClock, $this->getDefaultTags());
+        return new InMemoryClientAdapter(
+            $this->getDefaultTags(),
+            clock: $this->getClockImplementation()
+        );
     }
 
     /**
@@ -146,8 +146,9 @@ class AdapterManager extends MultipleInstanceManager
         $logLevel = $config['log_level'] ?? 'debug';
 
         return new DatadogStatsDClientAdapter(
-            new DatadogLoggingClient($this->app->make('log'), $logLevel, $config),
-            $this->getDefaultTags()
+            new DatadogLoggingClient($this->app->make('log'), $config, $logLevel),
+            $this->getDefaultTags(),
+            clock: $this->getClockImplementation()
         );
     }
 
@@ -157,7 +158,11 @@ class AdapterManager extends MultipleInstanceManager
      */
     protected function createDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
-        return new DatadogStatsDClientAdapter(new DogStatsd($config), $this->getDefaultTags());
+        return new DatadogStatsDClientAdapter(
+            new DogStatsd($config),
+            $this->getDefaultTags(),
+            clock: $this->getClockImplementation()
+        );
     }
 
     /**
@@ -168,13 +173,15 @@ class AdapterManager extends MultipleInstanceManager
      */
     protected function createLeagueAdapter(array $config): LeagueStatsDClientAdapter
     {
-        $leagueClient = new Client($config['instance_id'] ?? null);
-        $leagueClient->configure($config);
-
-        return new LeagueStatsDClientAdapter(
-            $leagueClient,
-            new SampleRateSendDecider(),
-            $this->getDefaultTags()
+        return LeagueStatsDClientAdapter::fromConfig(
+            $config,
+            $this->getDefaultTags(),
+            clock: $this->getClockImplementation()
         );
+    }
+
+    protected function getClockImplementation(): ClockInterface
+    {
+        return new WrapperClock(FactoryImmutable::getDefaultInstance());
     }
 }
