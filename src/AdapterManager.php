@@ -4,6 +4,7 @@ namespace Cosmastech\LaravelStatsDAdapter;
 
 use Carbon\FactoryImmutable;
 use Carbon\WrapperClock;
+use Cosmastech\LaravelStatsDAdapter\Adapters\EventDispatchingStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\Datadog\DatadogStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
@@ -176,6 +177,20 @@ class AdapterManager extends MultipleInstanceManager
         return LeagueStatsDClientAdapter::fromConfig(
             $config,
             $this->getDefaultTags(),
+            clock: $this->getClockImplementation()
+        );
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     * @return InMemoryClientAdapter
+     * @throws BindingResolutionException
+     */
+    protected function createEventAdapter(array $config): InMemoryClientAdapter
+    {
+        return new InMemoryClientAdapter(
+            $this->getDefaultTags(),
+            new EventDispatchingStatsRecord($this->app->make('events')),
             clock: $this->getClockImplementation()
         );
     }
