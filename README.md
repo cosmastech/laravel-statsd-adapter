@@ -27,7 +27,7 @@ composer require cosmastech/laravel-statsd-adapter
 After installing the package, publish the configuration file using the following command:
 
 ```shell
-php artisan vendor:publish --provider="\Cosmastech\LaravelStatsDAdapter\StatsDAdapterServiceProvider"
+php artisan vendor:publish --provider="Cosmastech\LaravelStatsDAdapter\StatsDAdapterServiceProvider"
 ```
 
 ## Configuration
