@@ -37,6 +37,10 @@
         "phpstan/phpstan": "^1.11",
         "datadog/php-datadogstatsd": "^1.6.1"
     },
+    "suggest": {
+        "datadog/php-datadogstatsd": "For DataDog stats",
+        "league/statsd": "For generic statsd clients"
+    },
     "extra": {
         "laravel": {
             "providers": [

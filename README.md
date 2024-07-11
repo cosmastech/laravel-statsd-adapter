@@ -30,6 +30,18 @@ After installing the package, publish the configuration file using the following
 php artisan vendor:publish --provider="Cosmastech\LaravelStatsDAdapter\StatsDAdapterServiceProvider"
 ```
 
+### Optional Dependencies
+If you wish to use DataDog for logging stats, require the composer package
+
+```shell
+composer require datadog/php-datadogstatsd
+```
+
+For using League's statsd client, you'll need to install their package.
+```shell
+composer require league/statsd
+```
+
 ## Configuration
 
 The configuration file `config/statsd-adapter.php` allows you to customize the adapter's behavior. 
