@@ -42,7 +42,7 @@ class StatsDAdapterServiceProvider extends ServiceProvider implements Deferrable
         }
 
         $this->publishes([
-            __DIR__.'/../config/statsd-adapter.php' => config_path('statsd-adapter.php.php'),
+            __DIR__.'/../config/statsd-adapter.php' => config_path('statsd-adapter.php'),
         ], 'statsd-config');
     }
 }
