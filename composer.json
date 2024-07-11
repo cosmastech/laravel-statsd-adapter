@@ -41,7 +41,10 @@
         "laravel": {
             "providers": [
                 "Cosmastech\\LaravelStatsDAdapter\\StatsDAdapterServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Stats": "Cosmastech\\LaravelStatsDAdapter\\Stats"
+            }
         }
     },
     "scripts": {
