@@ -39,7 +39,6 @@ class EventDispatchingStatsRecord extends InMemoryStatsRecord
         $this->dispatch(new CountRecordedEvent($inMemoryCountRecord));
     }
 
-
     public function recordGauge(InMemoryGaugeRecord $inMemoryGaugeRecord): void
     {
         $this->dispatch(new GaugeRecordedEvent($inMemoryGaugeRecord));
@@ -50,7 +49,6 @@ class EventDispatchingStatsRecord extends InMemoryStatsRecord
         $this->dispatch(new SetRecordedEvent($inMemorySetRecord));
     }
 
-
     public function recordHistogram(InMemoryHistogramRecord $inMemoryHistogramRecord): void
     {
         $this->dispatch(new HistogramRecordedEvent($inMemoryHistogramRecord));
@@ -60,7 +58,6 @@ class EventDispatchingStatsRecord extends InMemoryStatsRecord
     {
         $this->dispatch(new DistributionRecordedEvent($inMemoryDistributionRecord));
     }
-
 
     protected function dispatch(StatRecordedEvent $statRecordedEvent): void
     {
