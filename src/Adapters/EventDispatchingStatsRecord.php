@@ -16,7 +16,7 @@ use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemoryHistogramRec
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemorySetRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemoryStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemoryTimingRecord;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class EventDispatchingStatsRecord extends InMemoryStatsRecord
 {
