@@ -41,9 +41,10 @@ return [
             "disable_telemetry" => null,
         ],
         "log_datadog" => [
-            // see configuration options: https://docs.datadoghq.com/developers/dogstatsd/?code-lang=php&tab=hostagent#client-instantiation-parameters
             "adapter" => "log_datadog",
             "log_level" => "debug",
+            "log_channel" => null,
+            // see configuration options: https://docs.datadoghq.com/developers/dogstatsd/?code-lang=php&tab=hostagent#client-instantiation-parameters
             "decimal_precision" => null,
             "global_tags" => [],
             "metric_prefix" => null,

@@ -144,9 +144,13 @@ class AdapterManager extends MultipleInstanceManager
     protected function createLogDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
         $logLevel = $config['log_level'] ?? 'debug';
+        $logChannel = $config['log_channel'] ?? null;
+
+        $logManager = $this->app->make('log');
+        $logger = $logManager->channel($logChannel);
 
         return new DatadogStatsDClientAdapter(
-            new DatadogLoggingClient($this->app->make('log'), $config, $logLevel),
+            new DatadogLoggingClient($logger, $config, $logLevel),
             $this->getDefaultTags(),
             clock: $this->getClockImplementation()
         );
