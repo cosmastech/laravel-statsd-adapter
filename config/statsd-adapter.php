@@ -14,10 +14,14 @@ return [
      *      league
      *      datadog
      *      log_datadog
+     *      event
      */
     "channels" => [
         "memory" => [
             "adapter" => "memory",
+        ],
+        "event" => [
+            "adapter" => "event",
         ],
         "league" => [
             // see configuration options: https://github.com/thephpleague/statsd?tab=readme-ov-file#configuring

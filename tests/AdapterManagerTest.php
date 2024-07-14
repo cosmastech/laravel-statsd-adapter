@@ -2,6 +2,7 @@
 
 namespace Cosmastech\LaravelStatsDAdapter\Tests;
 
+use Cosmastech\LaravelStatsDAdapter\Adapters\EventDispatchingAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\Datadog\DatadogStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
@@ -143,5 +144,20 @@ class AdapterManagerTest extends AbstractTestCase
 
         // Then
         self::assertEquals(["abc" => "123"], $adapterManager->instance("memory")->getDefaultTags());
+    }
+
+    #[Test]
+    public function instance_event_returnsConfiguredEventDispatchingAdapter(): void
+    {
+        // Given
+        $adapterManager = $this->createAdapterManager();
+
+        // And events is configured
+
+        // When
+        $eventDispatchingAdapter = $adapterManager->instance('event');
+
+        // Then
+        self::assertInstanceOf(EventDispatchingAdapter::class, $eventDispatchingAdapter);
     }
 }
