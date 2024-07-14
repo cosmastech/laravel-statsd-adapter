@@ -2,6 +2,7 @@
 
 namespace Cosmastech\LaravelStatsDAdapter;
 
+use Cosmastech\LaravelStatsDAdapter\Adapters\EventDispatchingStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Support\DeferrableProvider;
@@ -25,6 +26,13 @@ class StatsDAdapterServiceProvider extends ServiceProvider implements Deferrable
             StatsDClientAdapter::class,
             fn (Application $app) => $app->make(AdapterManager::class)->instance()
         );
+
+        $this->app->singleton(
+            EventDispatchingStatsRecord::class,
+            function (Application $app): EventDispatchingStatsRecord {
+                return new EventDispatchingStatsRecord($app->make('events'));
+            }
+        );
     }
 
     /**
@@ -32,7 +40,7 @@ class StatsDAdapterServiceProvider extends ServiceProvider implements Deferrable
      */
     public function provides(): array
     {
-        return [AdapterManager::class, StatsDClientAdapter::class];
+        return [AdapterManager::class, StatsDClientAdapter::class, EventDispatchingStatsRecord::class];
     }
 
     protected function offerPublishing(): void

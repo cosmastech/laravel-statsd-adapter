@@ -2,6 +2,7 @@
 
 namespace Cosmastech\LaravelStatsDAdapter\Tests;
 
+use Cosmastech\LaravelStatsDAdapter\Adapters\EventDispatchingStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\Datadog\DatadogStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
@@ -58,5 +59,18 @@ class StatsDAdapterServiceProviderTest extends AbstractTestCase
 
         // Then
         self::assertEqualsCanonicalizing($defaultTags, $clientAdapter->getDefaultTags());
+    }
+
+    #[Test]
+    public function eventDispatchingStatsRecord_isSingleton(): void
+    {
+        // Given
+        $firstRecord = $this->app->make(EventDispatchingStatsRecord::class);
+
+        // When
+        $secondRecord = $this->app->make(EventDispatchingStatsRecord::class);
+
+        // Then
+        self::assertSame($firstRecord, $secondRecord);
     }
 }
