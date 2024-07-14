@@ -33,7 +33,7 @@ class EventDispatchingStatsRecordTest extends AbstractTestCase
         $inMemoryClient = new InMemoryClientAdapter([], $this->eventDispatchingStatsRecord);
 
         // And
-        $closure = fn() => ["hello" => "world"];
+        $closure = fn () => ["hello" => "world"];
 
         // When
         $output = $inMemoryClient->time($closure, "my-timing-stat", 0.92, [
