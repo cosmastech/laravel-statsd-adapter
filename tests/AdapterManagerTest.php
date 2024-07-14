@@ -2,11 +2,14 @@
 
 namespace Cosmastech\LaravelStatsDAdapter\Tests;
 
+use Cosmastech\PsrLoggerSpy\LogFactory;
+use Cosmastech\PsrLoggerSpy\LoggerSpy;
 use Cosmastech\StatsDClientAdapter\Adapters\Datadog\DatadogStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Clients\Datadog\DatadogLoggingClient;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use League\StatsD\StatsDClient;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -72,6 +75,31 @@ class AdapterManagerTest extends AbstractTestCase
         // Then
         self::assertInstanceOf(DatadogStatsDClientAdapter::class, $datadogClientAdapter);
         self::assertInstanceOf(DatadogLoggingClient::class, $datadogClientAdapter->getClient());
+    }
+
+    #[Test]
+    public function instance_logDatadog_logsToSpecifiedChannel(): void
+    {
+        // Given
+        $loggerSpy = new class (new LogFactory()) extends LoggerSpy {
+            public function pushProcessor(): void
+            {
+                // This will no longer be necessary if/when this PR is merged into laravel/framework https://github.com/laravel/framework/pull/52117/files
+            }
+        };
+        Log::extend("spy", fn () => $loggerSpy);
+        Config::set('statsd-adapter.channels.log_datadog.log_channel', "spy");
+        Config::set('logging.channels.spy', ["driver" => "spy"]);
+
+        // And
+        $datadogLoggingClientAdapter = $this->createAdapterManager()->instance("log_datadog");
+
+        // When
+        $datadogLoggingClientAdapter->increment("testing-counter");
+
+        // Then
+        self::assertCount(1, $logs = $loggerSpy->getLogs());
+        self::assertEquals("testing-counter:1|c", $logs[0]->message);
     }
 
     public function instance_league_returnsConfiguredLeagueStatsDClient(): void

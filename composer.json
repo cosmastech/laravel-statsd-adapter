@@ -35,7 +35,8 @@
         "orchestra/testbench": "^9.1",
         "laravel/facade-documenter": "dev-main",
         "phpstan/phpstan": "^1.11",
-        "datadog/php-datadogstatsd": "^1.6.1"
+        "datadog/php-datadogstatsd": "^1.6.1",
+        "cosmastech/psr-logger-spy": "^0.0.2"
     },
     "suggest": {
         "datadog/php-datadogstatsd": "For DataDog stats",
