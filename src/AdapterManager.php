@@ -2,8 +2,8 @@
 
 namespace Cosmastech\LaravelStatsDAdapter;
 
-use Carbon\FactoryImmutable;
-use Carbon\WrapperClock;
+use Cosmastech\LaravelStatsDAdapter\Concerns\Laravel10AdapterTrait;
+use Cosmastech\LaravelStatsDAdapter\Utility\ClockWrapper;
 use Cosmastech\StatsDClientAdapter\Adapters\Datadog\DatadogStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
@@ -23,6 +23,8 @@ use Psr\Clock\ClockInterface;
  */
 class AdapterManager extends MultipleInstanceManager
 {
+    use Laravel10AdapterTrait;
+
     protected $driverKey = 'adapter';
 
     protected string $defaultInstanceName;
@@ -80,7 +82,7 @@ class AdapterManager extends MultipleInstanceManager
      */
     public function getInstanceConfig($name)
     {
-        return $this->config->get("statsd-adapter.channels.{$name}");
+        return $this->setDriverKeyInConfig($this->config->get("statsd-adapter.channels.{$name}"));
     }
 
     /**
@@ -122,17 +124,6 @@ class AdapterManager extends MultipleInstanceManager
             $this->getDefaultTags(),
             clock: $this->getClockImplementation()
         );
-    }
-
-    /**
-     * @param  array<string, mixed>  $config
-     * @return DatadogStatsDClientAdapter
-     *
-     * @throws BindingResolutionException
-     */
-    protected function createLog_datadogAdapter(array $config): DatadogStatsDClientAdapter
-    {
-        return $this->createLogDatadogAdapter($config);
     }
 
     /**
@@ -186,6 +177,6 @@ class AdapterManager extends MultipleInstanceManager
 
     protected function getClockImplementation(): ClockInterface
     {
-        return new WrapperClock(FactoryImmutable::getDefaultInstance());
+        return new ClockWrapper();
     }
 }
