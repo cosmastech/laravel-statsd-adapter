@@ -6,6 +6,7 @@ use Cosmastech\LaravelStatsDAdapter\Concerns\Laravel10AdapterTrait;
 use Cosmastech\LaravelStatsDAdapter\Utility\ClockWrapper;
 use Cosmastech\StatsDClientAdapter\Adapters\Datadog\DatadogStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
+use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemoryStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Clients\Datadog\DatadogLoggingClient;
@@ -117,11 +118,13 @@ class AdapterManager extends MultipleInstanceManager
     /**
      * @param  array<string, mixed>  $config
      * @return InMemoryClientAdapter
+     * @throws BindingResolutionException
      */
     protected function createMemoryAdapter(array $config): InMemoryClientAdapter
     {
         return new InMemoryClientAdapter(
             $this->getDefaultTags(),
+            $this->app->make(InMemoryStatsRecord::class),
             clock: $this->getClockImplementation()
         );
     }
