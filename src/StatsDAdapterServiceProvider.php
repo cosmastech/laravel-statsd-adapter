@@ -2,6 +2,7 @@
 
 namespace Cosmastech\LaravelStatsDAdapter;
 
+use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemoryStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Support\DeferrableProvider;
@@ -24,6 +25,11 @@ class StatsDAdapterServiceProvider extends ServiceProvider implements Deferrable
         $this->app->bind(
             StatsDClientAdapter::class,
             fn (Application $app) => $app->make(AdapterManager::class)->instance()
+        );
+
+        $this->app->singleton(
+            InMemoryStatsRecord::class,
+            fn (Application $app) => new InMemoryStatsRecord()
         );
     }
 

@@ -4,6 +4,7 @@ namespace Cosmastech\LaravelStatsDAdapter\Tests;
 
 use Cosmastech\StatsDClientAdapter\Adapters\Datadog\DatadogStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
+use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemoryStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Clients\Datadog\DatadogLoggingClient;
 use Illuminate\Support\Facades\Config;
@@ -58,5 +59,18 @@ class StatsDAdapterServiceProviderTest extends AbstractTestCase
 
         // Then
         self::assertEqualsCanonicalizing($defaultTags, $clientAdapter->getDefaultTags());
+    }
+
+    #[Test]
+    public function inMemoryStatsRecord_isSingleton(): void
+    {
+        // Given
+        $firstRecord = $this->app->make(InMemoryStatsRecord::class);
+
+        // When
+        $secondRecord = $this->app->make(InMemoryStatsRecord::class);
+
+        // Then
+        self::assertSame($firstRecord, $secondRecord);
     }
 }
