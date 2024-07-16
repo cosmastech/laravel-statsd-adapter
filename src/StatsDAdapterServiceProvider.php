@@ -22,7 +22,7 @@ class StatsDAdapterServiceProvider extends ServiceProvider implements Deferrable
             fn (Application $app) => new AdapterManager($app),
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             StatsDClientAdapter::class,
             fn (Application $app) => $app->make(AdapterManager::class)->instance()
         );
