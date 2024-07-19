@@ -24,7 +24,7 @@
     },
     "require": {
         "php": "^8.2",
-        "cosmastech/statsd-client-adapter": "^0.2.0",
+        "cosmastech/statsd-client-adapter": "^0.3",
         "illuminate/support": "^10.0|^11.0",
         "illuminate/contracts": "^10.0|^11.0"
     },
@@ -45,7 +45,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Cosmastech\\LaravelStatsDAdapter\\StatsDAdapterServiceProvider"
+                "Cosmastech\\LaravelStatsDAdapter\\StatsDAdapterServiceProvider",
+                "Cosmastech\\LaravelStatsDAdapter\\StatsClientAwareServiceProvider"
             ],
             "aliases": {
                 "Stats": "Cosmastech\\LaravelStatsDAdapter\\Stats"
