@@ -24,7 +24,7 @@
     },
     "require": {
         "php": "^8.2",
-        "cosmastech/statsd-client-adapter": "^0.3",
+        "cosmastech/statsd-client-adapter": "^0.4",
         "illuminate/support": "^10.0|^11.0",
         "illuminate/contracts": "^10.0|^11.0"
     },

@@ -83,7 +83,9 @@ class AdapterManager extends MultipleInstanceManager
      */
     public function getInstanceConfig($name)
     {
-        return $this->setDriverKeyInConfig($this->config->get("statsd-adapter.channels.{$name}"));
+        return $this->setDriverKeyInConfig(
+            $this->config->get("statsd-adapter.channels.{$name}")
+        );
     }
 
     /**

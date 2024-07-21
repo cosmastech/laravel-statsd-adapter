@@ -38,7 +38,7 @@ class StatsDAdapterServiceProvider extends ServiceProvider implements Deferrable
      */
     public function provides(): array
     {
-        return [AdapterManager::class, StatsDClientAdapter::class];
+        return [AdapterManager::class, StatsDClientAdapter::class, InMemoryStatsRecord::class];
     }
 
     protected function offerPublishing(): void
