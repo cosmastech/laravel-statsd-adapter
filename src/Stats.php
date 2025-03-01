@@ -16,6 +16,7 @@ use UnitEnum;
  * @method static \Cosmastech\LaravelStatsDAdapter\AdapterManager forgetInstance(array|string|null $name = null)
  * @method static void purge(string|null $name = null)
  * @method static \Cosmastech\LaravelStatsDAdapter\AdapterManager extend(string $name, \Closure $callback)
+ * @method static \Cosmastech\LaravelStatsDAdapter\AdapterManager setApplication(\Illuminate\Contracts\Foundation\Application $app)
  * @method static void timing(string|UnitEnum $stat, float $durationMs, float $sampleRate = 1, array $tags = [])
  * @method static mixed time(callable $closure, string|UnitEnum $stat, float $sampleRate = 1, array $tags = [])
  * @method static void gauge(string|UnitEnum $stat, float $value, float $sampleRate = 1, array $tags = [])

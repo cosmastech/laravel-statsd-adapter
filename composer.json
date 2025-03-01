@@ -32,7 +32,7 @@
         "phpunit/phpunit": "^11.2.5",
         "friendsofphp/php-cs-fixer": "^3.59",
         "league/statsd": "^2.0.0",
-        "orchestra/testbench": "^9.1",
+        "orchestra/testbench": "^9.1|^10.0",
         "laravel/facade-documenter": "dev-main",
         "phpstan/phpstan": "^1.11",
         "datadog/php-datadogstatsd": "^1.6.1",
