@@ -38,7 +38,7 @@ class AdapterManager extends MultipleInstanceManager
     protected $config;
 
     /**
-     * @var array<mixed, mixed>
+     * @var array<array-key, mixed>
      */
     protected array $defaultTags;
 
@@ -57,7 +57,7 @@ class AdapterManager extends MultipleInstanceManager
      * @param  string|null  $name
      * @return StatsDClientAdapter
      */
-    public function channel(string $name = null): StatsDClientAdapter
+    public function channel(?string $name = null): StatsDClientAdapter
     {
         return $this->instance($name);
     }
