@@ -9,7 +9,7 @@ return [
     "default_tags" => [],
 
     /**
-     * You may name your channel anything you wish. Valid drivers are:
+     * You may name your channel anything you wish. Valid adapters are:
      *      memory
      *      league
      *      datadog
@@ -49,6 +49,7 @@ return [
             "global_tags" => [],
             "metric_prefix" => null,
             "disable_telemetry" => null,
+            "origin_detection" => false,
         ],
     ],
 ];
