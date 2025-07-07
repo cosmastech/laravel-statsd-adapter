@@ -159,7 +159,7 @@ class AdapterManager extends MultipleInstanceManager
     protected function createDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
         return new DatadogStatsDClientAdapter(
-            new DogStatsd($config),
+            new DogStatsd($config), // @phpstan-ignore
             $this->getDefaultTags(),
             clock: $this->getClockImplementation()
         );
