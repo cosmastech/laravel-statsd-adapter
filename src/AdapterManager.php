@@ -10,6 +10,7 @@ use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemoryStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\League\LeagueStatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Clients\Datadog\DatadogLoggingClient;
+use DataDog\BatchedDogStatsd;
 use DataDog\DogStatsd;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\MultipleInstanceManager;
@@ -158,8 +159,16 @@ class AdapterManager extends MultipleInstanceManager
      */
     protected function createDatadogAdapter(array $config): DatadogStatsDClientAdapter
     {
+        $batchSize = (int) ($config['batch_size'] ?? null);
+        if ($batchSize > 0) {
+            $client = new BatchedDogStatsd($config);
+            BatchedDogStatsd::$maxBufferLength = $batchSize;
+        } else {
+            $client = new DogStatsd($config);
+        }
+
         return new DatadogStatsDClientAdapter(
-            new DogStatsd($config),
+            $client,
             $this->getDefaultTags(),
             clock: $this->getClockImplementation()
         );

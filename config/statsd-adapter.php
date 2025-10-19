@@ -29,6 +29,10 @@ return [
             'throwConnectionExceptions' => true,
         ],
         "datadog" => [
+            /**
+             * By setting batch_size to a positive integer, the batched dogstatsd provider will be used.
+             */
+            'batch_size' => null,
             // see configuration options: https://docs.datadoghq.com/developers/dogstatsd/?code-lang=php&tab=hostagent#client-instantiation-parameters
             "adapter" => "datadog",
             "host" => env("DD_AGENT_HOST"),
