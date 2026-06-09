@@ -7,11 +7,28 @@ use Cosmastech\StatsDClientAdapter\Adapters\InMemory\InMemoryClientAdapter;
 use Cosmastech\StatsDClientAdapter\Adapters\InMemory\Models\InMemoryStatsRecord;
 use Cosmastech\StatsDClientAdapter\Adapters\StatsDClientAdapter;
 use Cosmastech\StatsDClientAdapter\Clients\Datadog\DatadogLoggingClient;
+use DataDog\BatchedDogStatsd;
 use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
 
 class StatsDAdapterServiceProviderTest extends AbstractTestCase
 {
+    private int $initialBufferSize;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->initialBufferSize = BatchedDogStatsd::$maxBufferLength;
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        BatchedDogStatsd::$maxBufferLength = $this->initialBufferSize;
+        parent::tearDown();
+    }
+
     #[Test]
     public function makeStatsDClientAdapter_returnsDefaultInstance(): void
     {
@@ -72,5 +89,38 @@ class StatsDAdapterServiceProviderTest extends AbstractTestCase
 
         // Then
         self::assertSame($firstRecord, $secondRecord);
+    }
+
+    #[Test]
+    public function datadogConfigHasBatchSize_resolve_setsBufferSize(): void
+    {
+        // Given
+        Config::set('statsd-adapter.channels.datadog.batch_size', 2);
+        Config::set('statsd-adapter.default', 'datadog');
+
+        // When
+        $clientAdapter = $this->app->make(StatsDClientAdapter::class);
+
+        // Then
+        self::assertInstanceOf(BatchedDogStatsd::class, $clientAdapter->getClient());
+        self::assertEquals(2, BatchedDogStatsd::$maxBufferLength);
+    }
+
+    #[Test]
+    public function batchedDogStats_terminatingApp_submitsStats(): void
+    {
+        // Given
+        Config::set('statsd-adapter.channels.datadog.batch_size', 2);
+        Config::set('statsd-adapter.default', 'datadog');
+
+        // And
+        $clientAdapter = $this->app->make(StatsDClientAdapter::class);
+        $clientAdapter->increment('testing');
+
+        // When
+        $this->app->terminate();
+
+        // Then
+
     }
 }
